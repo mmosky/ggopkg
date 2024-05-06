@@ -1,0 +1,2 @@
+# ggopkg
+generic go package
