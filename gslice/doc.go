@@ -1,0 +1,2 @@
+// Package gslice
+package gslice
