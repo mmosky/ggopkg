@@ -19,7 +19,7 @@ func TestForEach(t *testing.T) {
 
 func TestTryForEach(t *testing.T) {
 	arr := []int{1, 2, 3}
-	err := TryForEach(arr, func(v int) error {
+	err := ForEachE(arr, func(v int) error {
 		if v == 2 {
 			return errors.New("error on 2")
 		}
@@ -44,7 +44,7 @@ func TestForEach2(t *testing.T) {
 
 func TestTryForEach2(t *testing.T) {
 	arr := []int{1, 2, 3}
-	err := TryForEach2(arr, func(i int, v int) error {
+	err := ForEachE2(arr, func(i int, v int) error {
 		if i == 1 {
 			return errors.New("error on index 1")
 		}

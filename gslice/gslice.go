@@ -8,11 +8,11 @@ func ForEach[T any](arr []T, f func(T)) {
 	}
 }
 
-// TryForEach iterates over the elements of the slice arr and applies the
+// ForEachE iterates over the elements of the slice arr and applies the
 // function f to each element. If the function f returns an error for any
-// element, TryForEach immediately returns that error. Otherwise, it returns
+// element, ForEachE immediately returns that error. Otherwise, it returns
 // nil.
-func TryForEach[T any](arr []T, f func(T) error) error {
+func ForEachE[T any](arr []T, f func(T) error) error {
 	for _, v := range arr {
 		err := f(v)
 		if err != nil {
@@ -31,12 +31,12 @@ func ForEach2[T any](arr []T, f func(int, T)) {
 	}
 }
 
-// TryForEach2 iterates over the elements of the slice arr and applies the
+// ForEachE2 iterates over the elements of the slice arr and applies the
 // function f to each element and its index. The function f is called with
 // the index i and the element v for each element in the slice. If the
-// function f returns an error for any element, TryForEach2 immediately
+// function f returns an error for any element, ForEachE2 immediately
 // returns that error. Otherwise, it returns nil.
-func TryForEach2[T any](arr []T, f func(int, T) error) error {
+func ForEachE2[T any](arr []T, f func(int, T) error) error {
 	for i, v := range arr {
 		err := f(i, v)
 		if err != nil {
@@ -62,6 +62,27 @@ func Filter[T any](arr []T, pred func(T) bool) []T {
 	return ret
 }
 
+// FilterE returns a new slice containing all elements of the slice arr for
+// which the predicate function pred returns true. If arr is nil, FilterE
+// returns nil. If the predicate function pred returns an error for any
+// element, FilterE immediately returns that error. Otherwise, it returns nil.
+func FilterE[T any](arr []T, pred func(T) (bool, error)) ([]T, error) {
+	if arr == nil {
+		return nil, nil
+	}
+	ret := make([]T, 0, len(arr))
+	for i, v := range arr {
+		b, err := pred(v)
+		if err != nil {
+			return nil, err
+		}
+		if b {
+			ret = append(ret, arr[i])
+		}
+	}
+	return ret, nil
+}
+
 // Map returns a new slice containing the results of applying the function f
 // to each element of the slice arr. If arr is nil, Map returns nil.
 func Map[T1, T2 any](arr []T1, f func(T1) T2) []T2 {
@@ -73,4 +94,23 @@ func Map[T1, T2 any](arr []T1, f func(T1) T2) []T2 {
 		ret[i] = f(v)
 	}
 	return ret
+}
+
+// MapE returns a new slice containing the results of applying the function f
+// to each element of the slice arr. If arr is nil, MapE returns nil. If the
+// function f returns an error for any element, MapE immediately returns that
+// error. Otherwise, it returns nil.
+func MapE[T1, T2 any](arr []T1, f func(T1) (T2, error)) ([]T2, error) {
+	if arr == nil {
+		return nil, nil
+	}
+	ret := make([]T2, len(arr))
+	for i, v := range arr {
+		v2, err := f(v)
+		if err != nil {
+			return nil, err
+		}
+		ret[i] = v2
+	}
+	return ret, nil
 }
