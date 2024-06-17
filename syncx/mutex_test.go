@@ -23,6 +23,14 @@ func BenchmarkMutex(b *testing.B) {
 			mu.Unlock()
 		}
 	})
+	b.Run(`CompatLockUnlock`, func(b *testing.B) {
+		mu := &Mutex{}
+		for i := 0; i < b.N; i++ {
+			mu.Lock()
+			_ = mu
+			mu.Unlock()
+		}
+	})
 	b.Run(`SerialLockUnlock`, func(b *testing.B) {
 		mu := NewMutex(WithTimeout(time.Millisecond * 200))
 		for i := 0; i < b.N; i++ {
