@@ -22,6 +22,7 @@ type Mutex struct {
 
 func (m *Mutex) Lock() {
 	m.mu.Lock()
+	m.setTimeout()
 	if m.timeout > 0 {
 		m.tick()
 	}
@@ -43,6 +44,7 @@ func (m *Mutex) TryLock() bool {
 	if !m.mu.TryLock() {
 		return false
 	}
+	m.setTimeout()
 	if m.timeout > 0 {
 		m.tick()
 	}
@@ -72,6 +74,12 @@ func (m *Mutex) free() {
 			heap.Remove(&lh, i)
 			return
 		}
+	}
+}
+
+func (m *Mutex) setTimeout() {
+	if m.timeout == 0 && globalTimeout > 0 {
+		m.timeout = globalTimeout
 	}
 }
 

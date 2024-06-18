@@ -8,9 +8,6 @@ import (
 
 func NewMutex(opts ...Option) *Mutex {
 	opt := makeOpt(opts)
-	if opt.timeout == 0 {
-		opt.timeout = globalTimeout
-	}
 	return &Mutex{timeout: opt.timeout, done: make(chan struct{})}
 }
 
@@ -22,6 +19,7 @@ type Mutex struct {
 
 func (m *Mutex) Lock() {
 	m.mu.Lock()
+	m.setTimeout()
 	if m.timeout > 0 {
 		go m.tick()
 	}
@@ -40,6 +38,7 @@ func (m *Mutex) TryLock() bool {
 	if !m.mu.TryLock() {
 		return false
 	}
+	m.setTimeout()
 	if m.timeout > 0 {
 		go m.tick()
 	}
@@ -51,4 +50,10 @@ func (m *Mutex) Unlock() {
 		m.done <- struct{}{}
 	}
 	m.mu.Unlock()
+}
+
+func (m *Mutex) setTimeout() {
+	if m.timeout == 0 && globalTimeout > 0 {
+		m.timeout = globalTimeout
+	}
 }
