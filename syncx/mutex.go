@@ -7,3 +7,5 @@ type Mutex = syncx.Mutex
 var NewMutex = syncx.NewMutex
 
 var WithTimeout = syncx.WithTimeout
+
+var SetGlobalTimeout = syncx.SetGlobalTimeout

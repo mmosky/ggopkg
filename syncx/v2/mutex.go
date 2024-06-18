@@ -10,9 +10,6 @@ import (
 
 func NewMutex(opts ...Option) *Mutex {
 	opt := makeOpt(opts)
-	if opt.timeout == 0 {
-		opt.timeout = globalTimeout
-	}
 	return &Mutex{timeout: opt.timeout, done: make(chan struct{})}
 }
 
