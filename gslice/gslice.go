@@ -83,6 +83,26 @@ func FilterE[T any](arr []T, pred func(T) (bool, error)) ([]T, error) {
 	return ret, nil
 }
 
+// Filter2 returns two new slices. The first slice contains all elements of
+// the slice arr for which the predicate function pred returns true. The
+// second slice contains all elements for which the predicate function pred
+// returns false. If arr is nil, Filter2 returns two nil slices.
+func Filter2[T any](arr []T, pred func(int, T) bool) ([]T, []T) {
+	if arr == nil {
+		return nil, nil
+	}
+	ret1 := make([]T, 0, len(arr))
+	ret2 := make([]T, 0, len(arr))
+	for i, v := range arr {
+		if pred(i, v) {
+			ret1 = append(ret1, arr[i])
+		} else {
+			ret2 = append(ret2, arr[i])
+		}
+	}
+	return ret1, ret2
+}
+
 // Map returns a new slice containing the results of applying the function f
 // to each element of the slice arr. If arr is nil, Map returns nil.
 func Map[T1, T2 any](arr []T1, f func(T1) T2) []T2 {
@@ -113,4 +133,26 @@ func MapE[T1, T2 any](arr []T1, f func(T1) (T2, error)) ([]T2, error) {
 		ret[i] = v2
 	}
 	return ret, nil
+}
+
+// Count returns the number of elements in the slice arr for which the
+// predicate function pred returns true.
+func Count[T any](arr []T, pred func(T) bool) int {
+	count := 0
+	for _, v := range arr {
+		if pred(v) {
+			count++
+		}
+	}
+	return count
+}
+
+// In returns true if the slice arr contains the value v, and false otherwise.
+func In[T comparable](arr []T, v T) bool {
+	for _, e := range arr {
+		if e == v {
+			return true
+		}
+	}
+	return false
 }
