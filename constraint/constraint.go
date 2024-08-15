@@ -1,25 +1,17 @@
 package constraint
 
-type Integer interface {
-	Signed | Unsigned
-}
+import "golang.org/x/exp/constraints"
 
-type Float interface {
-	~float32 | ~float64
-}
+type Integer = constraints.Integer
+
+type Float = constraints.Float
 
 type Number interface {
 	Integer | Float
 }
 
-type Ordered interface {
-	Integer | Float | ~string
-}
+type Ordered = constraints.Ordered
 
-type Signed interface {
-	~int | ~int8 | ~int16 | ~int32 | ~int64
-}
+type Signed = constraints.Signed
 
-type Unsigned interface {
-	~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~uintptr
-}
+type Unsigned = constraints.Unsigned

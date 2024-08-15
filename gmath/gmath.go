@@ -42,6 +42,30 @@ func Min[T constraint.Ordered](x ...T) T {
 	return min
 }
 
+func Clamp[T constraint.Ordered](x, min, max T) T {
+	if x < min {
+		return min
+	}
+	if x > max {
+		return max
+	}
+	return x
+}
+
+func AtLeast[T constraint.Ordered](x, min T) T {
+	if x < min {
+		return min
+	}
+	return x
+}
+
+func AtMost[T constraint.Ordered](x, max T) T {
+	if x > max {
+		return max
+	}
+	return x
+}
+
 func Sum[T constraint.Number](x ...T) T {
 	var sum T
 	for _, v := range x {

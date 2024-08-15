@@ -1,6 +1,8 @@
 package gval
 
-import "github.com/mmosky/ggopkg/tuple"
+import (
+	"github.com/mmosky/ggopkg/tuple"
+)
 
 func Zero[T any]() T {
 	var t T
